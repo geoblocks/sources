@@ -6,7 +6,7 @@ import EPSG_21781 from './EPSG21781.js';
 
 /**
  * Available resolutions as defined in
- * http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @const {!Array.<number>}
  */
 const swisstopoResolutions = [
@@ -18,7 +18,7 @@ const swisstopoResolutions = [
 
 /**
  * The matrix set is is constructed by passing the matrix set defined in the
- * table at http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * table at https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
  */
@@ -42,8 +42,8 @@ const extents = {
 /**
  * Create a Configure tilematrix set 26 (maximum zoomlevel without interpolation).
  * See ch.swisstopo.pixelkarte-farbe from
- * http://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
- * and notes in http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * https://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
+ * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
  * @return {!ol.tilegrid.WMTS} tilegrid
  */
@@ -93,7 +93,7 @@ class SwisstopoSource extends olSourceWMTS {
     console.assert(extension);
 
     super({
-      attributions: '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>',
+      attributions: '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>',
       url: swisstopoCreateUrl(projection, extension),
       // OpenLayers stable is broken, see https://github.com/openlayers/openlayers/pull/8510
       // dimensions: {
