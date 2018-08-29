@@ -62,10 +62,10 @@ function createTileGrid(projection) {
  */
 function swisstopoCreateUrl(projection, format) {
   if (projection === EPSG_2056) {
-    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/current' +
+    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
       '/2056/{TileMatrix}/{TileCol}/{TileRow}.'}${format}`;
   } else if (projection === EPSG_21781) {
-    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/current' +
+    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
       '/21781/{TileMatrix}/{TileRow}/{TileCol}.'}${format}`;
   }
   throw new Error(`Unsupported projection ${projection}`);
@@ -95,10 +95,9 @@ class SwisstopoSource extends olSourceWMTS {
     super({
       attributions: '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>',
       url: swisstopoCreateUrl(projection, extension),
-      // OpenLayers stable is broken, see https://github.com/openlayers/openlayers/pull/8510
-      // dimensions: {
-      //   'Time': options.timestamp
-      // },
+      dimensions: {
+        'Time': options.timestamp
+      },
       projection: projection,
       requestEncoding: 'REST',
       layer: options.layer,
