@@ -1,20 +1,7 @@
-import {equals} from 'ol/array.js';
-import {WEBGL} from 'ol/has.js';
 // avoid importing anything that results in an instanceof check
 // since these extensions are global, instanceof checks fail with modules
 
 (function(global) {
-
-  // show generated maps for rendering tests
-  const showMap = (global.location.search.indexOf('generate') >= 0);
-
-  // show a diff when rendering tests fail
-  const showDiff = (global.location.search.indexOf('showdiff') >= 0);
-
-  /**
-   * The default tolerance for image comparisons.
-   */
-  global.IMAGE_TOLERANCE = 1.5;
 
   function afterLoad(type, path, next) {
     const client = new XMLHttpRequest();
@@ -311,6 +298,24 @@ import {WEBGL} from 'ol/has.js';
 
 
   /**
+   * @param {Array|Uint8ClampedArray} arr1 The first array to compare.
+   * @param {Array|Uint8ClampedArray} arr2 The second array to compare.
+   * @return {boolean} Whether the two arrays are equal.
+   */
+  function equals(arr1, arr2) {
+    const len1 = arr1.length;
+    if (len1 !== arr2.length) {
+      return false;
+    }
+    for (let i = 0; i < len1; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Checks if the array sort of equals another array.
    * @param {Object} obj The other object.
    * @return {expect.Assertion} The assertion.
@@ -354,122 +359,12 @@ import {WEBGL} from 'ol/has.js';
     return this;
   };
 
-  global.createMapDiv = function(width, height) {
-    const target = document.createElement('div');
-    const style = target.style;
-    style.position = 'absolute';
-    style.left = '-1000px';
-    style.top = '-1000px';
-    style.width = width + 'px';
-    style.height = height + 'px';
-    document.body.appendChild(target);
-
-    return target;
-  };
-
-  global.disposeMap = function(map) {
-    const target = map.getTarget();
-    map.setTarget(null);
-    if (target && target.parentNode) {
-      target.parentNode.removeChild(target);
-    }
-    map.dispose();
-  };
-
-  global.assertWebGL = function(map) {
-    if (!WEBGL) {
-      expect().fail('No WebGL support!');
-    }
-  };
-
-  function resembleCanvas(canvas, referenceImage, tolerance, done) {
-    if (showMap) {
-      const wrapper = document.createElement('div');
-      wrapper.style.width = canvas.width + 'px';
-      wrapper.style.height = canvas.height + 'px';
-      wrapper.appendChild(canvas);
-      document.body.appendChild(wrapper);
-      document.body.appendChild(document.createTextNode(referenceImage));
-    }
-    const width = canvas.width;
-    const height = canvas.height;
-    const image = new Image();
-    image.addEventListener('load', function() {
-      expect(image.width).to.be(width);
-      expect(image.height).to.be(height);
-      const referenceCanvas = document.createElement('canvas');
-      referenceCanvas.width = image.width;
-      referenceCanvas.height = image.height;
-      const referenceContext = referenceCanvas.getContext('2d');
-      referenceContext.drawImage(image, 0, 0, image.width, image.height);
-      const context = canvas.getContext('2d');
-      const output = context.createImageData(canvas.width, canvas.height);
-      const mismatchPx = pixelmatch(
-        context.getImageData(0, 0, width, height).data,
-        referenceContext.getImageData(0, 0, width, height).data,
-        output.data, width, height);
-      const mismatchPct = mismatchPx / (width * height) * 100;
-      if (showDiff && mismatchPct > tolerance) {
-        const diffCanvas = document.createElement('canvas');
-        diffCanvas.width = width;
-        diffCanvas.height = height;
-        diffCanvas.getContext('2d').putImageData(output, 0, 0);
-        document.body.appendChild(diffCanvas);
-      }
-      expect(mismatchPct).to.be.below(tolerance);
-      done();
-    });
-    image.addEventListener('error', function() {
-      expect().fail('Reference image could not be loaded');
-      done();
-    });
-    image.src = referenceImage;
-  }
-  global.resembleCanvas = resembleCanvas;
-
-  /**
-   * Assert that the given map resembles a reference image.
-   *
-   * @param {ol.PluggableMap} map A map using the canvas renderer.
-   * @param {string} referenceImage Path to the reference image.
-   * @param {number} tolerance The accepted mismatch tolerance.
-   * @param {function} done A callback to indicate that the test is done.
-   */
-  global.expectResemble = function(map, referenceImage, tolerance, done) {
-    map.render();
-    map.on('postcompose', function(event) {
-      if (event.frameState.animate) {
-        // make sure the tile-queue is empty
-        return;
-      }
-
-      let canvas;
-      if (event.glContext) {
-        const webglCanvas = event.glContext.getCanvas();
-        expect(webglCanvas).to.be.a(HTMLCanvasElement);
-
-        // draw the WebGL canvas on a new canvas, because we can not create
-        // a 2d context for that canvas because there is already a webgl context.
-        canvas = document.createElement('canvas');
-        canvas.width = webglCanvas.width;
-        canvas.height = webglCanvas.height;
-        canvas.getContext('2d').drawImage(webglCanvas, 0, 0,
-          webglCanvas.width, webglCanvas.height);
-      } else {
-        canvas = event.context.canvas;
-      }
-      expect(canvas).to.be.a(HTMLCanvasElement);
-
-      resembleCanvas(canvas, referenceImage, tolerance, done);
-    });
-  };
 
   const features = {
     ArrayBuffer: 'ArrayBuffer' in global,
     'ArrayBuffer.isView': 'ArrayBuffer' in global && !!ArrayBuffer.isView,
     FileReader: 'FileReader' in global,
     Uint8ClampedArray: ('Uint8ClampedArray' in global),
-    WebGL: false
   };
 
   /**
