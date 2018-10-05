@@ -29,7 +29,7 @@
     "esModuleInterop": true
   },
   "include": [
-    "*.js",
+    "src/**/*.js",
     "node_modules/@types/openlayers/*",
     "types/**/*"
   ]

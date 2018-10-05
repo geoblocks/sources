@@ -1,3 +1,3 @@
 module.exports = {
-  entry: './main.js',
+  entry: './src/sources/main.example.js',
 };

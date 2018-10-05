@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "description": "Geoblocks sources",
   "scripts": {
-    "eslint": "eslint *.js",
-    "eslint-fix": "eslint *.js --fix",
+    "karma": "karma start test/karma.config.js",
+    "karma-single": "npm run karma -- --single-run",
+    "eslint": "eslint src",
+    "eslint-fix": "eslint src --fix",
     "build": "webpack --mode production",
     "build-debug": "webpack --mode development",
     "start": "webpack-dev-server --mode development --content-base dist/ --watch",
@@ -27,6 +29,17 @@
     "typescript": "^3.1.0-dev.20180820",
     "webpack": "4.16.5",
     "webpack-cli": "3.1.0",
+    "karma": "^3.0.0",
+    "mocha": "5.2.0",
+    "sinon": "^6.0.0",
+    "expect.js": "0.3.1",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-mocha": "1.3.0",
+    "karma-sauce-launcher": "1.2.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "4.0.0-rc.2",
     "webpack-dev-server": "3.1.5"
   }
 }
