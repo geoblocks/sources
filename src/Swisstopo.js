@@ -1,12 +1,12 @@
 import olSourceWMTS from 'ol/source/WMTS.js';
 import olTilegridWMTS from 'ol/tilegrid/WMTS.js';
-import EPSG_2056 from './EPSG2056.js';
-import EPSG_21781 from './EPSG21781.js';
+import EPSG_2056 from './EPSG_2056.js';
+import EPSG_21781 from './EPSG_21781.js';
 
 
 /**
  * Available resolutions as defined in
- * https://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * http://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @const {!Array.<number>}
  */
 const swisstopoResolutions = [
@@ -18,7 +18,7 @@ const swisstopoResolutions = [
 
 /**
  * The matrix set is is constructed by passing the matrix set defined in the
- * table at https://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * table at http://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
  */
@@ -42,8 +42,8 @@ const extents = {
 /**
  * Create a Configure tilematrix set 26 (maximum zoomlevel without interpolation).
  * See ch.swisstopo.pixelkarte-farbe from
- * https://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
- * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * http://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
+ * and notes in http://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
  * @return {!ol.tilegrid.WMTS} tilegrid
  */
@@ -62,10 +62,10 @@ function createTileGrid(projection) {
  */
 function swisstopoCreateUrl(projection, format) {
   if (projection === EPSG_2056) {
-    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
+    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/current' +
       '/2056/{TileMatrix}/{TileCol}/{TileRow}.'}${format}`;
   } else if (projection === EPSG_21781) {
-    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
+    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/current' +
       '/21781/{TileMatrix}/{TileRow}/{TileCol}.'}${format}`;
   }
   throw new Error(`Unsupported projection ${projection}`);
@@ -93,11 +93,12 @@ class SwisstopoSource extends olSourceWMTS {
     console.assert(extension);
 
     super({
-      attributions: '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>',
+      attributions: '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>',
       url: swisstopoCreateUrl(projection, extension),
-      dimensions: {
-        'Time': options.timestamp
-      },
+      // OpenLayers stable is broken, see https://github.com/openlayers/openlayers/pull/8510
+      // dimensions: {
+      //   'Time': options.timestamp
+      // },
       projection: projection,
       requestEncoding: 'REST',
       layer: options.layer,

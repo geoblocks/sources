@@ -2,9 +2,10 @@
   "name": "@geoblocks/sources",
   "version": "0.0.1",
   "description": "Geoblocks sources",
+  "module": "src/index.js",
   "scripts": {
-    "eslint": "eslint *.js",
-    "eslint-fix": "eslint *.js --fix",
+    "eslint": "eslint src/*.js",
+    "eslint-fix": "eslint src/*.js --fix",
     "build": "webpack --mode production",
     "build-debug": "webpack --mode development",
     "start": "webpack-dev-server --mode development --content-base dist/ --watch",
