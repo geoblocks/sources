@@ -9,7 +9,7 @@ import EPSG_21781 from './EPSG_21781.js';
  * http://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @const {!Array.<number>}
  */
-const swisstopoResolutions = [
+export const RESOLUTIONS = [
   4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250,
   1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5,
   0.25, 0.1
@@ -23,7 +23,7 @@ const swisstopoResolutions = [
  * @return {!Array.<string>} matrix set.
  */
 const createSwisstopoMatrixSet = function(level) {
-  console.assert(level < swisstopoResolutions.length);
+  console.assert(level < RESOLUTIONS.length);
   const matrixSet = new Array(level);
   for (let i = 0; i <= level; ++i) {
     matrixSet[i] = String(i);
@@ -50,7 +50,7 @@ const extents = {
 function createTileGrid(projection) {
   return new olTilegridWMTS({
     extent: extents[projection],
-    resolutions: swisstopoResolutions.slice(0, 27 + 1),
+    resolutions: RESOLUTIONS.slice(0, 27 + 1),
     matrixIds: createSwisstopoMatrixSet(27)
   });
 }

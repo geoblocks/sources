@@ -16,6 +16,10 @@
   },
   "author": "",
   "license": "bsd",
+  "peerDependencies": {
+    "ol": "^5.2.0",
+    "proj4": "^2.4.4"
+  },
   "devDependencies": {
     "@types/ol": "^4.6.2",
     "@types/proj4": "^2.3.4",
