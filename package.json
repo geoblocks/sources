@@ -1,6 +1,6 @@
 {
   "name": "@geoblocks/sources",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Geoblocks sources",
   "module": "src/index.js",
   "scripts": {
