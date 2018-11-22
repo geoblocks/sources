@@ -1,7 +1,7 @@
 import olSourceWMTS from 'ol/source/WMTS.js';
 import olTilegridWMTS from 'ol/tilegrid/WMTS.js';
-import EPSG_2056 from './EPSG_2056.js';
-import EPSG_21781 from './EPSG_21781.js';
+import EPSG_2056 from '@geoblocks/proj/src/EPSG_2056.js';
+import EPSG_21781 from '@geoblocks/proj/src/EPSG_21781.js';
 
 
 /**
@@ -17,7 +17,7 @@ export const RESOLUTIONS = [
 
 
 /**
- * The matrix set is is constructed by passing the matrix set defined in the
+ * The matrix set is constructed by passing the matrix set defined in the
  * table at http://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
