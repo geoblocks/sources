@@ -2,8 +2,8 @@ import OLMap from 'ol/Map.js';
 
 import TileLayer from 'ol/layer/Tile.js';
 import View from 'ol/View.js';
-import SwisstopoSource from './Swisstopo.js';
-import EPSG_2056 from './EPSG_2056.js';
+import SwisstopoSource from '../src/Swisstopo.js';
+import EPSG_2056 from '@geoblocks/proj/src/EPSG_2056.js';
 
 const RESOLUTIONS = [650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1];
 
