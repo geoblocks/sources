@@ -1,4 +1,7 @@
+.eslintrc.yml
 .travis.yml
 tsconfig.json
-examples/*
+webpack.config.js
+dist/
+examples/
 *.test.js
