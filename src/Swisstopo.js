@@ -15,6 +15,11 @@ export const RESOLUTIONS = [
   0.25, 0.1
 ];
 
+/**
+ * @type {string}
+ */
+const DEFAULT_BASE_URL = 'https://wmts{0-9}.geo.admin.ch';
+
 
 /**
  * The matrix set is constructed by passing the matrix set defined in the
@@ -60,19 +65,21 @@ function createTileGrid(projection) {
  * @param {string} format The format.
  * @return {string} the url.
  */
-function swisstopoCreateUrl(projection, format) {
+function createUrl(projection, format) {
+  let url = '/1.0.0/{Layer}/default/{Time}';
   if (projection === EPSG_2056) {
-    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
-      '/2056/{TileMatrix}/{TileCol}/{TileRow}.'}${format}`;
+    url += `/2056/{TileMatrix}/{TileCol}/{TileRow}.${format}`;
   } else if (projection === EPSG_21781) {
-    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
-      '/21781/{TileMatrix}/{TileRow}/{TileCol}.'}${format}`;
+    url += `/21781/{TileMatrix}/{TileRow}/{TileCol}.${format}`;
+  } else {
+    throw new Error(`Unsupported projection ${projection}`);
   }
-  throw new Error(`Unsupported projection ${projection}`);
+  return url;
 }
 
 /**
  * @typedef {Object} Options
+ * @property {string} [baseUrl='https://wmts{0-9}.geo.admin.ch'] WMTS server base url.
  * @property {string} layer Layer name.
  * @property {string} [format='image/png'] Image format.
  * @property {string} [timestamp='current'] Timestamp.
@@ -103,7 +110,7 @@ class SwisstopoSource extends olSourceWMTS {
 
     super({
       attributions: '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>',
-      url: swisstopoCreateUrl(projection, extension),
+      url: `${options.baseUrl || DEFAULT_BASE_URL}${createUrl(projection, extension)}`,
       dimensions: {
         'Time': options.timestamp || 'current'
       },
