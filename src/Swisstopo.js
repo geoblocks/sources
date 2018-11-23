@@ -65,12 +65,13 @@ function createTileGrid(projection) {
 }
 
 /**
+ * @param {string} baseUrl The base url
  * @param {string} projection The projection.
  * @param {string} format The format.
  * @return {string} the url.
  */
-function createUrl(projection, format) {
-  let url = '/1.0.0/{Layer}/default/{Time}';
+function createUrl(baseUrl, projection, format) {
+  let url = `${baseUrl}/1.0.0/{Layer}/default/{Time}`;
   if (projection === EPSG_2056) {
     url += `/2056/{TileMatrix}/{TileCol}/{TileRow}.${format}`;
   } else if (projection === EPSG_21781) {
@@ -115,7 +116,7 @@ class SwisstopoSource extends olSourceWMTS {
 
     super({
       attributions: options.attributions || DEFAULT_ATTRIBUTIONS,
-      url: `${options.baseUrl || DEFAULT_BASE_URL}${createUrl(projection, extension)}`,
+      url: createUrl(options.baseUrl || DEFAULT_BASE_URL, projection, extension),
       dimensions: {
         'Time': options.timestamp || 'current'
       },
