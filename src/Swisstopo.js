@@ -6,7 +6,7 @@ import EPSG_21781 from '@geoblocks/proj/src/EPSG_21781.js';
 
 /**
  * Available resolutions as defined in
- * http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @const {!Array.<number>}
  */
 export const RESOLUTIONS = [
@@ -23,11 +23,11 @@ const DEFAULT_BASE_URL = 'https://wmts{0-9}.geo.admin.ch';
 /**
  * @type {string}
  */
-const DEFAULT_ATTRIBUTIONS = '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>';
+const DEFAULT_ATTRIBUTIONS = '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>';
 
 /**
  * The matrix set is constructed by passing the matrix set defined in the
- * table at http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * table at https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
  */
@@ -51,8 +51,8 @@ const extents = {
 /**
  * Create a Configure tilematrix set 26 (maximum zoomlevel without interpolation).
  * See ch.swisstopo.pixelkarte-farbe from
- * http://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
- * and notes in http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * https://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
+ * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
  * @return {!ol.tilegrid.WMTS} tilegrid
  */
@@ -84,7 +84,7 @@ function createUrl(projection, format) {
 /**
  * @typedef {Object} Options
  * @property {string} [baseUrl='https://wmts{0-9}.geo.admin.ch'] WMTS server base url.
- * @property {string} [attributions='&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>'] Source attributions.
+ * @property {string} [attributions='&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>'] Source attributions.
  * @property {string} layer Layer name.
  * @property {string} [format='image/png'] Image format.
  * @property {string} [timestamp='current'] Timestamp.
