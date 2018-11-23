@@ -62,14 +62,23 @@ function createTileGrid(projection) {
  */
 function swisstopoCreateUrl(projection, format) {
   if (projection === EPSG_2056) {
-    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/current' +
+    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
       '/2056/{TileMatrix}/{TileCol}/{TileRow}.'}${format}`;
   } else if (projection === EPSG_21781) {
-    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/current' +
+    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
       '/21781/{TileMatrix}/{TileRow}/{TileCol}.'}${format}`;
   }
   throw new Error(`Unsupported projection ${projection}`);
 }
+
+/**
+ * @typedef {Object} Options
+ * @property {string} layer Layer name.
+ * @property {string} [format='image/png'] Image format.
+ * @property {string} [timestamp='current'] Timestamp.
+ * @property {string} projection Projection.
+ * @property {string} [crossOrigin='anonymous'] Cross origin.
+ */
 
 /**
  * Layer source for the Swisstopo tile server.
@@ -80,7 +89,7 @@ function swisstopoCreateUrl(projection, format) {
 class SwisstopoSource extends olSourceWMTS {
 
   /**
-   * @param {Object} options WMTS options.
+   * @param {Options} options WMTS options.
    */
   constructor(options) {
     const format = options.format || 'image/png';
@@ -89,16 +98,15 @@ class SwisstopoSource extends olSourceWMTS {
     const tilegrid = createTileGrid(projection);
     const projectionCode = projection.split(':')[1];
     const extension = format.split('/')[1];
-    console.assert(projectionCode);
-    console.assert(extension);
+    console.assert(!!projectionCode);
+    console.assert(!!extension);
 
     super({
       attributions: '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>',
       url: swisstopoCreateUrl(projection, extension),
-      // OpenLayers stable is broken, see https://github.com/openlayers/openlayers/pull/8510
-      // dimensions: {
-      //   'Time': options.timestamp
-      // },
+      dimensions: {
+        'Time': options.timestamp || 'current'
+      },
       projection: projection,
       requestEncoding: 'REST',
       layer: options.layer,
@@ -106,7 +114,7 @@ class SwisstopoSource extends olSourceWMTS {
       matrixSet: projectionCode,
       format: format,
       tileGrid: tilegrid,
-      crossOrigin: options.crossOrigin
+      crossOrigin: options.crossOrigin || 'anonymous'
     });
 
     /**

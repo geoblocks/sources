@@ -10,9 +10,7 @@ const RESOLUTIONS = [650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1];
 const swisstopoPixelkarteFarbe = new SwisstopoSource({
   layer: 'ch.swisstopo.pixelkarte-farbe',
   format: 'image/jpeg',
-  timestamp: 'current',
-  projection: EPSG_2056,
-  crossOrigin: 'anonymous'
+  projection: EPSG_2056
 });
 
 const layers = [
