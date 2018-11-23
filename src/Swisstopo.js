@@ -20,6 +20,10 @@ export const RESOLUTIONS = [
  */
 const DEFAULT_BASE_URL = 'https://wmts{0-9}.geo.admin.ch';
 
+/**
+ * @type {string}
+ */
+const DEFAULT_ATTRIBUTIONS = '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>';
 
 /**
  * The matrix set is constructed by passing the matrix set defined in the
@@ -80,6 +84,7 @@ function createUrl(projection, format) {
 /**
  * @typedef {Object} Options
  * @property {string} [baseUrl='https://wmts{0-9}.geo.admin.ch'] WMTS server base url.
+ * @property {string} [attributions='&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>'] Source attributions.
  * @property {string} layer Layer name.
  * @property {string} [format='image/png'] Image format.
  * @property {string} [timestamp='current'] Timestamp.
@@ -109,7 +114,7 @@ class SwisstopoSource extends olSourceWMTS {
     console.assert(!!extension);
 
     super({
-      attributions: '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>',
+      attributions: options.attributions || DEFAULT_ATTRIBUTIONS,
       url: `${options.baseUrl || DEFAULT_BASE_URL}${createUrl(projection, extension)}`,
       dimensions: {
         'Time': options.timestamp || 'current'
