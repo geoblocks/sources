@@ -31,7 +31,7 @@ const DEFAULT_ATTRIBUTIONS = '&copy; <a href="https://www.swisstopo.admin.ch">sw
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
  */
-const createSwisstopoMatrixSet = function(level) {
+export const createSwisstopoMatrixSet = function(level) {
   console.assert(level < RESOLUTIONS.length);
   const matrixSet = new Array(level);
   for (let i = 0; i <= level; ++i) {
@@ -54,13 +54,14 @@ const extents = {
  * https://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
  * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
+ * @param {number} level The zoomlevel
  * @return {!ol.tilegrid.WMTS} tilegrid
  */
-function createTileGrid(projection) {
+export function createTileGrid(projection, level) {
   return new olTilegridWMTS({
     extent: extents[projection],
-    resolutions: RESOLUTIONS.slice(0, 27 + 1),
-    matrixIds: createSwisstopoMatrixSet(27)
+    resolutions: RESOLUTIONS.slice(0, level + 1),
+    matrixIds: createSwisstopoMatrixSet(level)
   });
 }
 
@@ -111,7 +112,7 @@ export default class SwisstopoSource extends olSourceWMTS {
     const format = options.format || 'image/png';
     const projection = options.projection;
     console.assert(projection === EPSG_21781 || projection === EPSG_2056);
-    const tilegrid = createTileGrid(projection);
+    const tilegrid = createTileGrid(projection, 27);
     const projectionCode = projection.split(':')[1];
     const extension = format.split('/')[1];
     console.assert(!!projectionCode);
