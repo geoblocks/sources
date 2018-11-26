@@ -6,7 +6,7 @@ import EPSG_21781 from '@geoblocks/proj/src/EPSG_21781.js';
 
 /**
  * Available resolutions as defined in
- * http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @const {!Array.<number>}
  */
 export const RESOLUTIONS = [
@@ -15,10 +15,19 @@ export const RESOLUTIONS = [
   0.25, 0.1
 ];
 
+/**
+ * @type {string}
+ */
+const DEFAULT_BASE_URL = 'https://wmts{0-9}.geo.admin.ch';
+
+/**
+ * @type {string}
+ */
+const DEFAULT_ATTRIBUTIONS = '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>';
 
 /**
  * The matrix set is constructed by passing the matrix set defined in the
- * table at http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * table at https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
  */
@@ -42,8 +51,8 @@ const extents = {
 /**
  * Create a Configure tilematrix set 26 (maximum zoomlevel without interpolation).
  * See ch.swisstopo.pixelkarte-farbe from
- * http://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
- * and notes in http://api3.geo.admin.ch/services/sdiservices.html#wmts.
+ * https://wmts10.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
+ * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
  * @return {!ol.tilegrid.WMTS} tilegrid
  */
@@ -56,23 +65,27 @@ function createTileGrid(projection) {
 }
 
 /**
+ * @param {string} baseUrl The base url
  * @param {string} projection The projection.
  * @param {string} format The format.
  * @return {string} the url.
  */
-function swisstopoCreateUrl(projection, format) {
+function createUrl(baseUrl, projection, format) {
+  let url = `${baseUrl}/1.0.0/{Layer}/default/{Time}`;
   if (projection === EPSG_2056) {
-    return `${'https://wmts{20-24}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
-      '/2056/{TileMatrix}/{TileCol}/{TileRow}.'}${format}`;
+    url += `/2056/{TileMatrix}/{TileCol}/{TileRow}.${format}`;
   } else if (projection === EPSG_21781) {
-    return `${'https://wmts{5-9}.geo.admin.ch/1.0.0/{Layer}/default/{Time}' +
-      '/21781/{TileMatrix}/{TileRow}/{TileCol}.'}${format}`;
+    url += `/21781/{TileMatrix}/{TileRow}/{TileCol}.${format}`;
+  } else {
+    throw new Error(`Unsupported projection ${projection}`);
   }
-  throw new Error(`Unsupported projection ${projection}`);
+  return url;
 }
 
 /**
  * @typedef {Object} Options
+ * @property {string} [baseUrl='https://wmts{0-9}.geo.admin.ch'] WMTS server base url.
+ * @property {string} [attributions='&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>'] Source attributions.
  * @property {string} layer Layer name.
  * @property {string} [format='image/png'] Image format.
  * @property {string} [timestamp='current'] Timestamp.
@@ -102,8 +115,8 @@ class SwisstopoSource extends olSourceWMTS {
     console.assert(!!extension);
 
     super({
-      attributions: '&copy; <a href="http://www.swisstopo.admin.ch">swisstopo</a>',
-      url: swisstopoCreateUrl(projection, extension),
+      attributions: options.attributions || DEFAULT_ATTRIBUTIONS,
+      url: createUrl(options.baseUrl || DEFAULT_BASE_URL, projection, extension),
       dimensions: {
         'Time': options.timestamp || 'current'
       },
