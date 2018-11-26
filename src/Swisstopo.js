@@ -94,6 +94,7 @@ function createUrl(baseUrl, projection, format) {
  * @property {string} [format='image/png'] Image format.
  * @property {string} [timestamp='current'] Timestamp.
  * @property {string} projection Projection.
+ * @property {number} [level] Max zoom level.
  * @property {string} [crossOrigin='anonymous'] Cross origin.
  */
 
@@ -112,7 +113,7 @@ export default class SwisstopoSource extends olSourceWMTS {
     const format = options.format || 'image/png';
     const projection = options.projection;
     console.assert(projection === EPSG_21781 || projection === EPSG_2056);
-    const tilegrid = createTileGrid(projection, 27);
+    const tilegrid = createTileGrid(projection, options.level || 27);
     const projectionCode = projection.split(':')[1];
     const extension = format.split('/')[1];
     console.assert(!!projectionCode);
