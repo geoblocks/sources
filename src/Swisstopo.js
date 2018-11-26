@@ -102,7 +102,7 @@ function createUrl(baseUrl, projection, format) {
  *          registered by Swisstopo to use the service.
  * @see https://api3.geo.admin.ch/services/sdiservices.html#wmts
  */
-class SwisstopoSource extends olSourceWMTS {
+export default class SwisstopoSource extends olSourceWMTS {
 
   /**
    * @param {Options} options WMTS options.
@@ -144,6 +144,3 @@ class SwisstopoSource extends olSourceWMTS {
     return extents[this.projectionCode_];
   }
 }
-
-
-export default SwisstopoSource;
