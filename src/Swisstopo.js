@@ -71,6 +71,9 @@ function createTileGrid(projection) {
  * @return {string} the url.
  */
 function createUrl(baseUrl, projection, format) {
+  if (baseUrl.includes('{Layer}')) {
+    return baseUrl;
+  }
   let url = `${baseUrl}/1.0.0/{Layer}/default/{Time}`;
   if (projection === EPSG_2056) {
     url += `/2056/{TileMatrix}/{TileCol}/{TileRow}.${format}`;
