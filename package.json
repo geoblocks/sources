@@ -14,7 +14,7 @@
     "start": "webpack-dev-server --mode development --content-base dist/ --watch",
     "typecheck": "tsc --pretty",
     "lint": "npm run eslint && npm run typecheck",
-    "test": "npm run lint && npm run build-example && npm run build-example-debug",
+    "test": "npm run lint && npm run build && npm run build-example && npm run build-example-debug",
     "doc": "typedoc --out dist/api --theme minimal --readme none --hideGenerator --listInvalidSymbolLinks --toc none"
   },
   "files": [
