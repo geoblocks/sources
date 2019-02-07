@@ -1,7 +1,6 @@
 import olSourceWMTS from 'ol/source/WMTS.js';
 import olTilegridWMTS from 'ol/tilegrid/WMTS.js';
-import EPSG_2056 from '@geoblocks/proj/src/EPSG_2056.js';
-import EPSG_21781 from '@geoblocks/proj/src/EPSG_21781.js';
+import {EPSG_2056, EPSG_21781} from '@geoblocks/proj';
 
 
 /**
@@ -44,8 +43,8 @@ export const createSwisstopoMatrixSet = function(level) {
  * Extents of Swiss projections.
  */
 const extents = {
-  [EPSG_2056]: [2420000, 1030000, 2900000, 1350000],
-  [EPSG_21781]: [420000, 30000, 900000, 350000]
+  [EPSG_2056.code]: [2420000, 1030000, 2900000, 1350000],
+  [EPSG_21781.code]: [420000, 30000, 900000, 350000]
 };
 
 /**
@@ -76,9 +75,9 @@ function createUrl(baseUrl, projection, format) {
     return baseUrl;
   }
   let url = `${baseUrl}/1.0.0/{Layer}/default/{Time}`;
-  if (projection === EPSG_2056) {
+  if (projection === EPSG_2056.code) {
     url += `/2056/{TileMatrix}/{TileCol}/{TileRow}.${format}`;
-  } else if (projection === EPSG_21781) {
+  } else if (projection === EPSG_21781.code) {
     url += `/21781/{TileMatrix}/{TileRow}/{TileCol}.${format}`;
   } else {
     throw new Error(`Unsupported projection ${projection}`);
@@ -112,7 +111,7 @@ export default class SwisstopoSource extends olSourceWMTS {
   constructor(options) {
     const format = options.format || 'image/png';
     const projection = options.projection;
-    console.assert(projection === EPSG_21781 || projection === EPSG_2056);
+    console.assert(projection === EPSG_21781.code || projection === EPSG_2056.code);
     const tilegrid = createTileGrid(projection, options.level || 27);
     const projectionCode = projection.split(':')[1];
     const extension = format.split('/')[1];
