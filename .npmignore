@@ -1,7 +1,0 @@
-.eslintrc.yml
-.travis.yml
-tsconfig.json
-webpack.config.js
-dist/
-examples/
-*.test.js

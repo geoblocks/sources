@@ -1,4 +1,5 @@
 /node_modules/
 /package-lock.json
 /dist/api
-/dist/main.js
+/dist/main.*
+/dist/sources.*
