@@ -4,7 +4,7 @@
   "description": "Geoblocks sources",
   "main": "dist/sources.js",
   "module": "dist/sources.js",
-  "source": "src/index.js",
+  "geoblocks_src": "src/index.js",
   "scripts": {
     "eslint": "eslint src/*.js",
     "eslint-fix": "eslint src/*.js --fix",
