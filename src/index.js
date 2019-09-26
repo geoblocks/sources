@@ -1,3 +1,3 @@
-import Swisstopo from './Swisstopo';
+import Swisstopo from './Swisstopo.js';
 
 export {Swisstopo};
