@@ -39,7 +39,7 @@
     "ol": "^5.2.0",
     "proj4": "2.5.0",
     "tsconfig-paths": "3.9.0",
-    "typedoc": "~0.13.0",
+    "typedoc": "~0.15.0",
     "typescript": "^3.1.6",
     "webpack": "4.26.0",
     "webpack-cli": "3.1.2",
