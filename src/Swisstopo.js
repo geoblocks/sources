@@ -80,7 +80,7 @@ const extents = {
  * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
  * @param {number} level The zoomlevel
- * @return {!ol.tilegrid.WMTS} tilegrid
+ * @return {!import('ol/tilegrid/WMTS.js').default} tilegrid
  */
 export function createTileGrid(projection, level) {
   return new olTilegridWMTS({
