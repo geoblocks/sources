@@ -2,16 +2,41 @@ import olSourceWMTS from 'ol/source/WMTS.js';
 import olTilegridWMTS from 'ol/tilegrid/WMTS.js';
 import {EPSG_2056, EPSG_21781} from '@geoblocks/proj';
 
-
 /**
  * Available resolutions as defined in
  * https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @const {!Array.<number>}
  */
 export const RESOLUTIONS = [
-  4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250,
-  1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5,
-  0.25, 0.1
+  4000,
+  3750,
+  3500,
+  3250,
+  3000,
+  2750,
+  2500,
+  2250,
+  2000,
+  1750,
+  1500,
+  1250,
+  1000,
+  750,
+  650,
+  500,
+  250,
+  100,
+  50,
+  20,
+  10,
+  5,
+  2.5,
+  2,
+  1.5,
+  1,
+  0.5,
+  0.25,
+  0.1,
 ];
 
 /**
@@ -22,7 +47,8 @@ const DEFAULT_BASE_URL = 'https://wmts{0-9}.geo.admin.ch';
 /**
  * @type {string}
  */
-const DEFAULT_ATTRIBUTIONS = '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>';
+const DEFAULT_ATTRIBUTIONS =
+  '&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>';
 
 /**
  * The matrix set is constructed by passing the matrix set defined in the
@@ -30,7 +56,7 @@ const DEFAULT_ATTRIBUTIONS = '&copy; <a href="https://www.swisstopo.admin.ch">sw
  * @param {number} level The zoomlevel
  * @return {!Array.<string>} matrix set.
  */
-export const createSwisstopoMatrixSet = function(level) {
+export const createSwisstopoMatrixSet = function (level) {
   console.assert(level < RESOLUTIONS.length);
   const matrixSet = new Array(level);
   for (let i = 0; i <= level; ++i) {
@@ -44,7 +70,7 @@ export const createSwisstopoMatrixSet = function(level) {
  */
 const extents = {
   [EPSG_2056.code]: [2420000, 1030000, 2900000, 1350000],
-  [EPSG_21781.code]: [420000, 30000, 900000, 350000]
+  [EPSG_21781.code]: [420000, 30000, 900000, 350000],
 };
 
 /**
@@ -54,13 +80,13 @@ const extents = {
  * and notes in https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {string} projection projection
  * @param {number} level The zoomlevel
- * @return {!ol.tilegrid.WMTS} tilegrid
+ * @return {!import('ol/tilegrid/WMTS.js').default} tilegrid
  */
 export function createTileGrid(projection, level) {
   return new olTilegridWMTS({
     extent: extents[projection],
     resolutions: RESOLUTIONS.slice(0, level + 1),
-    matrixIds: createSwisstopoMatrixSet(level)
+    matrixIds: createSwisstopoMatrixSet(level),
   });
 }
 
@@ -104,14 +130,15 @@ function createUrl(baseUrl, projection, format) {
  * @see https://api3.geo.admin.ch/services/sdiservices.html#wmts
  */
 export default class SwisstopoSource extends olSourceWMTS {
-
   /**
    * @param {Options} options WMTS options.
    */
   constructor(options) {
     const format = options.format || 'image/png';
     const projection = options.projection;
-    console.assert(projection === EPSG_21781.code || projection === EPSG_2056.code);
+    console.assert(
+      projection === EPSG_21781.code || projection === EPSG_2056.code
+    );
     const tilegrid = createTileGrid(projection, options.level || 27);
     const projectionCode = projection.split(':')[1];
     const extension = format.split('/')[1];
@@ -120,9 +147,13 @@ export default class SwisstopoSource extends olSourceWMTS {
 
     super({
       attributions: options.attributions || DEFAULT_ATTRIBUTIONS,
-      url: createUrl(options.baseUrl || DEFAULT_BASE_URL, projection, extension),
+      url: createUrl(
+        options.baseUrl || DEFAULT_BASE_URL,
+        projection,
+        extension
+      ),
       dimensions: {
-        'Time': options.timestamp || 'current'
+        'Time': options.timestamp || 'current',
       },
       projection: projection,
       requestEncoding: 'REST',
@@ -131,7 +162,7 @@ export default class SwisstopoSource extends olSourceWMTS {
       matrixSet: projectionCode,
       format: format,
       tileGrid: tilegrid,
-      crossOrigin: options.crossOrigin || 'anonymous'
+      crossOrigin: options.crossOrigin || 'anonymous',
     });
 
     /**
