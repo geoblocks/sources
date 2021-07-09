@@ -32,7 +32,7 @@
     "@geoblocks/base": "0.1.1",
     "@geoblocks/proj": "^0.4.0",
     "@types/ol": "6.4.2",
-    "@types/proj4": "2.5.0",
+    "@types/proj4": "2.5.1",
     "eslint": "7.19.0",
     "eslint-config-openlayers": "14.0.0",
     "microbundle": "0.13.0",
