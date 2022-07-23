@@ -3,9 +3,7 @@
 ## Publish a new version to npm
 
 ```bash
-rm -rf dist
 npm ci
-npm run build
 npm test
 ```
 

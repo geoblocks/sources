@@ -11,7 +11,7 @@
     "build": "microbundle --format es",
     "build-example": "webpack --mode production",
     "build-example-debug": "webpack --mode development",
-    "start": "webpack serve --content-base dist/",
+    "start": "webpack serve",
     "typecheck": "tsc --pretty",
     "lint": "npm run eslint && npm run typecheck",
     "test": "npm run lint && npm run build && npm run build-example && npm run build-example-debug && npm run typecheck && npm run doc",
