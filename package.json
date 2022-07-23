@@ -1,6 +1,6 @@
 {
   "name": "@geoblocks/sources",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Geoblocks sources",
   "main": "dist/sources.js",
   "module": "dist/sources.js",
@@ -14,8 +14,8 @@
     "start": "webpack serve --content-base dist/",
     "typecheck": "tsc --pretty",
     "lint": "npm run eslint && npm run typecheck",
-    "test": "npm run lint && npm run build && npm run build-example && npm run build-example-debug",
-    "doc": "typedoc --out dist/api --theme minimal --readme none --hideGenerator --listInvalidSymbolLinks --toc none"
+    "test": "npm run lint && npm run build && npm run build-example && npm run build-example-debug && npm run typecheck && npm run doc",
+    "doc": "typedoc --out dist/api --readme none --hideGenerator src/index.js"
   },
   "files": [
     "/src",
@@ -24,7 +24,6 @@
   "author": "",
   "license": "bsd",
   "peerDependencies": {
-    "@geoblocks/proj": "^0.4.0",
     "ol": "^5.2.0 || 6",
     "proj4": "^2.6.2"
   },
