@@ -1,42 +1,14 @@
 import olSourceWMTS from 'ol/source/WMTS.js';
 import olTilegridWMTS from 'ol/tilegrid/WMTS.js';
-import {EPSG_2056, EPSG_21781} from '@geoblocks/proj';
 
 /**
  * Available resolutions as defined in
  * https://api3.geo.admin.ch/services/sdiservices.html#wmts.
- * @const {!Array.<number>}
+ * @const {!Array<number>}
  */
 export const RESOLUTIONS = [
-  4000,
-  3750,
-  3500,
-  3250,
-  3000,
-  2750,
-  2500,
-  2250,
-  2000,
-  1750,
-  1500,
-  1250,
-  1000,
-  750,
-  650,
-  500,
-  250,
-  100,
-  50,
-  20,
-  10,
-  5,
-  2.5,
-  2,
-  1.5,
-  1,
-  0.5,
-  0.25,
-  0.1,
+  4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250, 1000,
+  750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5, 0.25, 0.1,
 ];
 
 /**
@@ -54,7 +26,7 @@ const DEFAULT_ATTRIBUTIONS =
  * The matrix set is constructed by passing the matrix set defined in the
  * table at https://api3.geo.admin.ch/services/sdiservices.html#wmts.
  * @param {number} level The zoomlevel
- * @return {!Array.<string>} matrix set.
+ * @return {!Array<string>} matrix set.
  */
 export const createSwisstopoMatrixSet = function (level) {
   console.assert(level < RESOLUTIONS.length);
@@ -69,8 +41,8 @@ export const createSwisstopoMatrixSet = function (level) {
  * Extents of Swiss projections.
  */
 const extents = {
-  [EPSG_2056.code]: [2420000, 1030000, 2900000, 1350000],
-  [EPSG_21781.code]: [420000, 30000, 900000, 350000],
+  ['EPSG:2056']: [2420000, 1030000, 2900000, 1350000],
+  ['EPSG:21781']: [420000, 30000, 900000, 350000],
 };
 
 /**
@@ -101,9 +73,9 @@ function createUrl(baseUrl, projection, format) {
     return baseUrl;
   }
   let url = `${baseUrl}/1.0.0/{Layer}/default/{Time}`;
-  if (projection === EPSG_2056.code) {
+  if (projection === 'EPSG:2056') {
     url += `/2056/{TileMatrix}/{TileCol}/{TileRow}.${format}`;
-  } else if (projection === EPSG_21781.code) {
+  } else if (projection === 'EPSG:21781') {
     url += `/21781/{TileMatrix}/{TileRow}/{TileCol}.${format}`;
   } else {
     throw new Error(`Unsupported projection ${projection}`);
@@ -114,7 +86,7 @@ function createUrl(baseUrl, projection, format) {
 /**
  * @typedef {Object} Options
  * @property {string} [baseUrl='https://wmts{0-9}.geo.admin.ch'] WMTS server base url.
- * @property {string} [attributions='&copy; <a href="https://www.swisstopo.admin.ch">swisstopo</a>'] Source attributions.
+ * @property {string} [attributions='...'] Source attributions.
  * @property {string} layer Layer name.
  * @property {string} [format='image/png'] Image format.
  * @property {string} [timestamp='current'] Timestamp.
@@ -136,9 +108,7 @@ export default class SwisstopoSource extends olSourceWMTS {
   constructor(options) {
     const format = options.format || 'image/png';
     const projection = options.projection;
-    console.assert(
-      projection === EPSG_21781.code || projection === EPSG_2056.code
-    );
+    console.assert(projection === 'EPSG:21781' || projection === 'EPSG:2056');
     const tilegrid = createTileGrid(projection, options.level || 27);
     const projectionCode = projection.split(':')[1];
     const extension = format.split('/')[1];
