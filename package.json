@@ -24,7 +24,7 @@
   "author": "",
   "license": "bsd",
   "peerDependencies": {
-    "ol": "^5.2.0 || 6 || 7",
+    "ol": "^5.2.0 || 6 || 7 || 8",
     "proj4": "^2.6.2"
   },
   "devDependencies": {
